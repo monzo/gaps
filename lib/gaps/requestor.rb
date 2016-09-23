@@ -195,12 +195,13 @@ module Gaps
           raise
         end
       rescue Google::APIClient::ServerError => e
-        if e.message =~ /\ABackend Error/
+        if e.message =~ /\ABackend Error/ || e.message =~ /\AA system error has occurred/
           if !opts[:noretry] && server_error_retry_limit < 5
             server_error_retry_limit += 1
             sleep(5) # assumption: exponential backoff not required for server errors
             retry
           else
+            log.error(e.message)
             raise
           end
         else
