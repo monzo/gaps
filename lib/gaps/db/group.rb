@@ -157,17 +157,20 @@ EOF
     end
 
     def hidden?
-      log.info("Checking if hidden", group_email: self.group_email)
       if configatron.permissions.privacy_settings.gaps_scheme &&
           custom_hidden?
+
+        log.info("Hidden by gaps scheme", group_email: self.group_email)
         return true
       end
 
       if configatron.permissions.privacy_settings.api_scheme &&
           group_settings_hidden?
+        log.info("Hidden by api scheme", group_email: self.group_email)
         return true
       end
 
+      log.info("Not hidden", group_email: self.group_email)
       return false
     end
 
@@ -186,6 +189,7 @@ EOF
     def group_settings_hidden?
       settings = self.group_settings
 
+      log.info("Checking API scheme", group_email: self.group_email)
 
       log.info(settings['whoCanJoin'], group_email: self.group_email)
       log.info(settings['whoCanViewGroup'], group_email: self.group_email)
