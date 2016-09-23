@@ -46,7 +46,7 @@ default: &default
   # Whether to fetch the Google Groups settings upon group
   # refresh. Needed to make the api_scheme work. In the future will
   # probably power other features.
-  populate_group_settings: true
+  populate_group_settings: false
 
   persist_config_to_group: false
 
