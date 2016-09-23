@@ -201,10 +201,11 @@ module Gaps
             sleep(5) # assumption: exponential backoff not required for server errors
             retry
           else
-            log.error(e.message)
+            log.error("Retry limit exceeded: " + e.message)
             raise
           end
         else
+          log.error("Not retryable error: " + e.message)
           raise
         end
       end
