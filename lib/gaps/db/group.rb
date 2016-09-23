@@ -157,6 +157,7 @@ EOF
     end
 
     def hidden?
+      log.info("Checking if hidden", group_email: self.group_email)
       if configatron.permissions.privacy_settings.gaps_scheme &&
           custom_hidden?
         return true
@@ -184,6 +185,10 @@ EOF
     # Is it hidden according to the Google Groups settings API?
     def group_settings_hidden?
       settings = self.group_settings
+
+
+      log.info(settings['whoCanJoin'], group_email: self.group_email)
+      log.info(settings['whoCanViewGroup'], group_email: self.group_email)
 
       !('true' == settings['showInGroupDirectory'] &&
         ['ANYONE_CAN_JOIN', 'ALL_IN_DOMAIN_CAN_JOIN'].include?(settings['whoCanJoin']) &&
