@@ -191,7 +191,17 @@ module Gaps
           log.info('Just hit rate limit', rate_limit: rate_limit, sleep: sleeping)
           sleep(sleeping)
           retry
+        elsif e.message =~ /\AA system error has occurred/
+          if !opts[:noretry] && server_error_retry_limit < 5
+            server_error_retry_limit += 1
+            sleep(5) # assumption: exponential backoff not required for server errors
+            retry
+          else
+            log.error("Retry limit exceeded: " + e.message)
+            raise
+          end
         else
+          log.error("Not retryable error: " + e.message)
           raise
         end
       rescue Google::APIClient::ServerError => e
