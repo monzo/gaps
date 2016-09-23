@@ -132,6 +132,7 @@ EOF
           if e.message =~ /Domain cannot use Api, Groups service is not installed/
             e.message << ' (HINT: you need to be on Google Groups for Business to use the Groups service. You can turn off groups settings population by disabling the `populate_group_settings` key.)'
           end
+          log.error("Error requesting group settings: #{e.message} (#{e.class})", group_email: self.group_email)
           raise
         else
           self.group_settings = settings
